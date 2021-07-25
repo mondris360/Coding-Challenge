@@ -1,6 +1,7 @@
 package com.aneeque.coding.challenge.demo.Service.Impl;
 
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
+import com.aneeque.coding.challenge.demo.Dto.UserSignUpResDto;
 import com.aneeque.coding.challenge.demo.Model.User;
 import com.aneeque.coding.challenge.demo.Repository.UserRepository;
 import com.aneeque.coding.challenge.demo.Service.UserService;
@@ -63,13 +64,16 @@ public class UserServiceImpl implements UserService {
         final String ENCRYPTED_PASSWORD =  bCryptPasswordEncoder.encode(request.getPassword());
 
         NEW_USER_DETAILS.setPassword(ENCRYPTED_PASSWORD);
+
         final User NEWLY_CREATED_USER = userRepository.save(NEW_USER_DETAILS);
+
+        final UserSignUpResDto USER_SIGNUP_RES_DTO = modelMapper.map(NEWLY_CREATED_USER, UserSignUpResDto.class);
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
         apiResponse.setHttpStatus(HttpStatus.CREATED);
         apiResponse.setMessage("User Created Successfully");
-        apiResponse.setData(NEWLY_CREATED_USER);
+        apiResponse.setData(USER_SIGNUP_RES_DTO);
 
         return  apiResponse;
     }
