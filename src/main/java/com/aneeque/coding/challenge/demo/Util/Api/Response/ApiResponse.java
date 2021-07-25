@@ -11,13 +11,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 public class ApiResponse implements Serializable {
-    private String status;
+    private boolean status;
     private HttpStatus httpStatus;
     private String message;
     private Object data;
 
 
-    public ApiResponse(String status, HttpStatus httpStatus, String message) {
+    public ApiResponse(boolean status, HttpStatus httpStatus, String message) {
         this.status = status;
         this.httpStatus = httpStatus;
         this.message = message;

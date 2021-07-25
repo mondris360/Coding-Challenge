@@ -2,6 +2,7 @@ package com.aneeque.coding.challenge.demo.Util.Api.Exception;
 
 
 import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.CustomException;
+import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.IllegalArgumentException;
 import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.InvalidInputException;
 import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UnAuthorizedException;
 import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UserNotFoundException;
@@ -23,6 +24,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(value ={IllegalArgumentException.class})
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ApiExceptionMessage  apiExceptionMessage = new ApiExceptionMessage(e.getMessage(), httpStatus, e.getPath());
+        logger.warn(e.getMessage());
+        return new ResponseEntity<>(apiExceptionMessage, httpStatus);
+    }
 
     @ExceptionHandler(value ={CustomException.class})
     public ResponseEntity<Object> handleCustomException(CustomException e) {
