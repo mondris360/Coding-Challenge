@@ -27,6 +27,9 @@ public class UserSignUpReqDto {
     @NotBlank(message = "password is mandatory")
     private String password;
 
+    @NotBlank(message = "confirmPass is mandatory")
+    private  String confirmPass;
+
     @NotBlank(message = "phoneNo is mandatory")
     private String phoneNo;
 
