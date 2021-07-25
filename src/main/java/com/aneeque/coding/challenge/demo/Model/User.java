@@ -1,5 +1,6 @@
 package com.aneeque.coding.challenge.demo.Model;
 
+import com.aneeque.coding.challenge.demo.Model.BaseModel.BaseModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class User extends BaseModel {
+
 
     private String firstName;
 
