@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "user")
@@ -25,6 +26,9 @@ public class User extends BaseModel {
     @NotNull(message = "email is mandatory")
     @Column(unique =  true)
     private String email;
+
+    @NotNull(message = "password is mandatory")
+    private String password;
 
     @NotNull(message = "phoneNo is mandatory")
     private String phoneNo;
