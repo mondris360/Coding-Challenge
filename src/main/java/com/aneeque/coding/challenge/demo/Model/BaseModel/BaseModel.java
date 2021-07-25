@@ -7,15 +7,11 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity(name = "base_model")
-@AllArgsConstructor
-@NoArgsConstructor
+@MappedSuperclass
 @Getter
 @Setter
 public class BaseModel {
