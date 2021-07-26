@@ -14,6 +14,7 @@ public class ApiResponse implements Serializable {
     private boolean status;
     private HttpStatus httpStatus;
     private String message;
+    private String jwtToken;
     private Object data;
 
 

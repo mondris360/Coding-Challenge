@@ -1,5 +1,6 @@
 package com.aneeque.coding.challenge.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Authority {
 
     @ManyToOne
     @JoinColumn(name="user_fk")
+    @JsonIgnore
     private User user;
 
     public Authority(User user, String authority) {

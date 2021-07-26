@@ -34,6 +34,6 @@ public class UserController {
 
         final ApiResponse API_RESPONSE = userService.login(request);
 
-        return new ResponseEntity<>(API_RESPONSE, HttpStatus.CREATED);
+        return new ResponseEntity<>(API_RESPONSE, HttpStatus.OK);
     }
 }

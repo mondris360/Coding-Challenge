@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity(name = "user")
@@ -13,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class User extends BaseModel {
+public class User extends BaseModel{
 
     @NotNull(message = "firstName is mandatory")
     private String firstName;

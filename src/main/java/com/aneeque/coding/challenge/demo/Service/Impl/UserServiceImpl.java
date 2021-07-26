@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private  UserAuthorityService authorityService;
 
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPassEncoder,
-                           JwtTokenConfig jwtToken , UserAuthorityService authorityService) {
+                           JwtTokenConfig jwtTokenConfig , UserAuthorityService authorityService) {
 
         this.userRepository = userRepository;
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         this.bCryptPasswordEncoder =  bCryptPassEncoder;
 
-        this.jwtTokenConfig = jwtToken;
+        this.jwtTokenConfig = jwtTokenConfig;
 
         this.authorityService = authorityService;
 
@@ -108,14 +108,14 @@ public class UserServiceImpl implements UserService {
 
         if (Objects.isNull(USER)) {
 
-           throw new UserNotFoundException("Invalid  Login Details", API_PATH);
+           throw new UserNotFoundException("Invalid  Email", API_PATH);
         }
 
         final boolean IS_VALID_PASSWORD = bCryptPasswordEncoder.matches(request.getPassword(), USER.getPassword());
-
+        System.out.println("IS_VALID_PASSWORD" +  IS_VALID_PASSWORD);
         if (!IS_VALID_PASSWORD) {
 
-            throw new UserNotFoundException("Invalid  Login Details", API_PATH);
+            throw new UserNotFoundException("Invalid  pass Details", API_PATH);
         }
 
         final String JWT_USER_TOKEN = jwtTokenConfig.generateToken(USER);
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
         apiResponse.setStatus(true);
         apiResponse.setHttpStatus(HttpStatus.OK);
         apiResponse.setMessage("Login Was Successful");
-        apiResponse.setData(JWT_USER_TOKEN);
+        apiResponse.setJwtToken(JWT_USER_TOKEN);
 
         return  apiResponse;
     }
