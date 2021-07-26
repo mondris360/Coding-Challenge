@@ -118,8 +118,15 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Invalid  Login Details", API_PATH);
         }
 
+        final String JWT_USER_TOKEN = jwtTokenConfig.generateToken(USER);
 
-        return null;
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setStatus(true);
+        apiResponse.setHttpStatus(HttpStatus.OK);
+        apiResponse.setMessage("Login Was Successful");
+        apiResponse.setData(JWT_USER_TOKEN);
+
+        return  apiResponse;
     }
 
     @Override

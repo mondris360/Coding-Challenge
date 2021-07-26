@@ -1,5 +1,6 @@
 package com.aneeque.coding.challenge.demo.Controller;
 
+import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Service.UserService;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
@@ -22,7 +23,16 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserSignUpReqDto request) {
+
         final ApiResponse API_RESPONSE = userService.createUser(request);
+
+        return new ResponseEntity<>(API_RESPONSE, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/user/login")
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody UserLoginDto request) {
+
+        final ApiResponse API_RESPONSE = userService.login(request);
 
         return new ResponseEntity<>(API_RESPONSE, HttpStatus.CREATED);
     }
