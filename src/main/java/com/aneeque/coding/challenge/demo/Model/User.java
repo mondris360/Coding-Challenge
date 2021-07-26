@@ -1,20 +1,18 @@
 package com.aneeque.coding.challenge.demo.Model;
 
 import com.aneeque.coding.challenge.demo.Model.BaseModel.BaseModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class User extends BaseModel {
 
     @NotNull(message = "firstName is mandatory")
@@ -34,6 +32,9 @@ public class User extends BaseModel {
     private String phoneNo;
 
     private String country;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
 
 
 }

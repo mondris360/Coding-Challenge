@@ -1,10 +1,8 @@
 package com.aneeque.coding.challenge.demo.Dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -12,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class UserSignUpReqDto {
 
     @NotBlank(message = "firstName is mandatory")
@@ -34,4 +33,7 @@ public class UserSignUpReqDto {
     private String phoneNo;
 
     private String country;
+
+    @NotBlank(message = "please specify one or more user authorities")
+    private String authorities;
 }

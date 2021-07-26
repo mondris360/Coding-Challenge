@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserSignUpReqDto request) {
-
         final ApiResponse API_RESPONSE = userService.createUser(request);
 
         return new ResponseEntity<>(API_RESPONSE, HttpStatus.CREATED);

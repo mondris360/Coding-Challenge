@@ -1,19 +1,24 @@
 package com.aneeque.coding.challenge.demo.Service.Impl;
 
+import com.aneeque.coding.challenge.demo.Config.JwtTokenConfig;
+import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpResDto;
 import com.aneeque.coding.challenge.demo.Model.User;
 import com.aneeque.coding.challenge.demo.Repository.UserRepository;
+import com.aneeque.coding.challenge.demo.Service.UserAuthorityService;
 import com.aneeque.coding.challenge.demo.Service.UserService;
 import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.IllegalArgumentException;
+import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UserNotFoundException;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
 
-import org.apache.tomcat.util.net.AprEndpoint;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 @Service
@@ -25,14 +30,22 @@ public class UserServiceImpl implements UserService {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private JwtTokenConfig jwtTokenConfig;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    private  UserAuthorityService authorityService;
+
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPassEncoder,
+                           JwtTokenConfig jwtToken , UserAuthorityService authorityService) {
 
         this.userRepository = userRepository;
 
         this.modelMapper = modelMapper;
 
-        this.bCryptPasswordEncoder =  bCryptPasswordEncoder;
+        this.bCryptPasswordEncoder =  bCryptPassEncoder;
+
+        this.jwtTokenConfig = jwtToken;
+
+        this.authorityService = authorityService;
 
     }
 
@@ -48,6 +61,7 @@ public class UserServiceImpl implements UserService {
              throw  new IllegalArgumentException("Password and confirm password values must be the same", apiRoute);
 
         }
+        System.out.println(request);
 
         request.setEmail(request.getEmail().trim().toLowerCase());
 
@@ -57,6 +71,7 @@ public class UserServiceImpl implements UserService {
 
             throw new IllegalArgumentException("A user with this email address already exist", apiRoute);
         }
+
 
         final User NEW_USER_DETAILS = modelMapper.map(request, User.class);
 
@@ -69,17 +84,41 @@ public class UserServiceImpl implements UserService {
 
         final UserSignUpResDto USER_SIGNUP_RES_DTO = modelMapper.map(NEWLY_CREATED_USER, UserSignUpResDto.class);
 
+        authorityService.saveAuthority(NEWLY_CREATED_USER, request.getAuthorities());
+
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
         apiResponse.setHttpStatus(HttpStatus.CREATED);
         apiResponse.setMessage("User Created Successfully");
         apiResponse.setData(USER_SIGNUP_RES_DTO);
 
+        System.out.println("returning response");
+
         return  apiResponse;
     }
 
     @Override
-    public ApiResponse login(UserSignUpReqDto request) {
+    public ApiResponse login(UserLoginDto request) {
+
+        // NOTE: user input has already been validated at dto level. Please check UserLoginDto
+
+        final String API_PATH = "user/login";
+
+        final User USER = userRepository.getByEmail(request.getEmail().toLowerCase().trim());
+
+        if (Objects.isNull(USER)) {
+
+           throw new UserNotFoundException("Invalid  Login Details", API_PATH);
+        }
+
+        final boolean IS_VALID_PASSWORD = bCryptPasswordEncoder.matches(request.getPassword(), USER.getPassword());
+
+        if (!IS_VALID_PASSWORD) {
+
+            throw new UserNotFoundException("Invalid  Login Details", API_PATH);
+        }
+
+
         return null;
     }
 
@@ -87,4 +126,5 @@ public class UserServiceImpl implements UserService {
     public ApiResponse getAllUsers() {
         return null;
     }
+
 }
