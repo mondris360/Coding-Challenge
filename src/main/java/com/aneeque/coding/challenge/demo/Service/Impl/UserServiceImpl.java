@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -131,6 +132,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse getAllUsers() {
+
+        final List<User> ALL_USERS = userRepository.findAll();
+
         return null;
     }
 
