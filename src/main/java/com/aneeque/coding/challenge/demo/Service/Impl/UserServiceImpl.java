@@ -2,6 +2,7 @@ package com.aneeque.coding.challenge.demo.Service.Impl;
 
 import com.aneeque.coding.challenge.demo.Config.JwtTokenConfig;
 import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
+import com.aneeque.coding.challenge.demo.Dto.UserResResDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpResDto;
 import com.aneeque.coding.challenge.demo.Model.User;
@@ -19,8 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -133,9 +136,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse getAllUsers() {
 
+        List<UserResResDto> userResResDtos =  new ArrayList<>();
+
         final List<User> ALL_USERS = userRepository.findAll();
 
-        return null;
+        ALL_USERS.forEach(user -> {
+
+            UserResResDto userResResDto = modelMapper.map(user, UserResResDto.class);
+            userResResDtos.add(userResResDto);
+
+        });
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setStatus(true);
+        apiResponse.setMessage("List of Users");
+        apiResponse.setData(userResResDtos);
+
+        return apiResponse;
     }
 
 }

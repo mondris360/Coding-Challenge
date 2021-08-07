@@ -26,25 +26,25 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserSignUpReqDto request) {
 
-        final ApiResponse API_RESPONSE = userService.createUser(request);
+        final ApiResponse apiResponse = userService.createUser(request);
 
-        return new ResponseEntity<>(API_RESPONSE, HttpStatus.CREATED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<ApiResponse> GetAllUsers() {
+    public ResponseEntity<ApiResponse> getAllUsers() {
 
-        final ApiResponse API_RESPONSE = userService.getAllUsers();
+        final ApiResponse apiResponse = userService.getAllUsers();
 
-        return new ResponseEntity<>(API_RESPONSE, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping("/user/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody UserLoginDto request) {
 
-        final ApiResponse API_RESPONSE = userService.login(request);
+        final ApiResponse apiResponse = userService.login(request);
 
-        return new ResponseEntity<>(API_RESPONSE, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 
