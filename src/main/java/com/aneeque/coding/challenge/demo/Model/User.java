@@ -1,6 +1,7 @@
 package com.aneeque.coding.challenge.demo.Model;
 
 import com.aneeque.coding.challenge.demo.Model.BaseModel.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class User extends BaseModel{
     private String email;
 
     @NotNull(message = "password is mandatory")
+    @JsonIgnore
     private String password;
 
     @NotNull(message = "phoneNo is mandatory")

@@ -13,6 +13,7 @@ import com.aneeque.coding.challenge.demo.Service.UserAuthorityService;
 import com.aneeque.coding.challenge.demo.Service.UserService;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Transactional
+@Transactional @Slf4j
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -135,7 +136,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse getAllUsers(int page, int size, String sortByField) {
-
         // i have already done this at the controller level but i just want to do it here in case another service wants to use this method
         if(size <= 0) {
 
@@ -162,25 +162,17 @@ public class UserServiceImpl implements UserService {
 
         Sort sort = Sort.by(sortDirection, validatedSortByField);
         Pageable pageable = PageRequest.of(page, size, sort);
-        final Page<User> ALL_USERS = userRepository.findAll(pageable);
-        List<UserResponseDto> userResponseDtos =  new ArrayList<>();
-
-        ALL_USERS.forEach(user -> {
-
-            UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
-            userResponseDtos.add(userResponseDto);
-
-        });
+        final Page<User> allUsers = userRepository.findAll(pageable);
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
         apiResponse.setMessage("List of Users");
-        apiResponse.setData(userResponseDtos);
+        apiResponse.setData(allUsers);
 
         return apiResponse;
     }
 
-    public String validateSortByField(String sortByField) {
+    private String validateSortByField(String sortByField) {
 
         switch (sortByField) {
 
@@ -201,8 +193,8 @@ public class UserServiceImpl implements UserService {
                 break;
 
             default:
-
                 throw new IllegalArgumentException("sortByField must have a value of firstName, lastName, country or createAt", "/user");
+
         }
 
         return sortByField;
