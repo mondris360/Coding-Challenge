@@ -4,7 +4,6 @@ import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Service.UserService;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

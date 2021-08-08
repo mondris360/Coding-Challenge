@@ -15,9 +15,12 @@ import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -96,30 +100,29 @@ public class UserServiceImpl implements UserService {
         apiResponse.setMessage("User Created Successfully");
         apiResponse.setData(USER_SIGNUP_RES_DTO);
 
-        System.out.println("returning response");
-
         return  apiResponse;
     }
 
     @Override
+    @Cacheable(cacheNames = "users-token", key = "#request.email")
     public ApiResponse login(UserLoginDto request) {
 
         // NOTE: user input has already been validated at dto level. Please check UserLoginDto
 
         final String API_PATH = "user/login";
-
+        System.out.println("Connecting to db");
         final User USER = userRepository.getByEmail(request.getEmail().toLowerCase().trim());
 
         if (Objects.isNull(USER)) {
 
-           throw new UserNotFoundException("Invalid  Email", API_PATH);
+           throw new UserNotFoundException("Invalid Login Details", API_PATH);
         }
 
         final boolean IS_VALID_PASSWORD = bCryptPasswordEncoder.matches(request.getPassword(), USER.getPassword());
-        System.out.println("IS_VALID_PASSWORD" +  IS_VALID_PASSWORD);
+
         if (!IS_VALID_PASSWORD) {
 
-            throw new UserNotFoundException("Invalid  pass Details", API_PATH);
+            throw new UserNotFoundException("Invalid Login Details", API_PATH);
         }
 
         final String JWT_USER_TOKEN = jwtTokenConfig.generateToken(USER);
