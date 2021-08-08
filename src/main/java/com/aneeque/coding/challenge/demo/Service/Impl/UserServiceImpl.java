@@ -4,7 +4,6 @@ import com.aneeque.coding.challenge.demo.Config.JwtTokenConfig;
 import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.IllegalArgumentException;
 import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.UserNotFoundException;
 import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
-import com.aneeque.coding.challenge.demo.Dto.UserResponseDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpResDto;
 import com.aneeque.coding.challenge.demo.Model.User;
@@ -24,12 +23,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.Validator;
+
 import java.util.Objects;
 
 @Service
-@Transactional @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService {
     private JwtTokenConfig jwtTokenConfig;
 
     private  UserAuthorityService authorityService;
+
+    private Validator validator;
+
 
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPassEncoder,
                            JwtTokenConfig jwtTokenConfig , UserAuthorityService authorityService) {
@@ -61,15 +64,14 @@ public class UserServiceImpl implements UserService {
     public ApiResponse createUser(UserSignUpReqDto request) {
 
         // NOTE: user input has already been validated at dto level. Please check UserSignUpReqDto
-
         String apiRoute = "/user";
+
 
         if (!request.getPassword().equals(request.getConfirmPass())) {
 
              throw  new IllegalArgumentException("Password and confirm password values must be the same", apiRoute);
 
         }
-        System.out.println(request);
 
         request.setEmail(request.getEmail().trim().toLowerCase());
 
