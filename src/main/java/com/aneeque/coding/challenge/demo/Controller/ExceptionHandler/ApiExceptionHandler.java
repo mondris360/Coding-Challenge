@@ -1,13 +1,13 @@
-package com.aneeque.coding.challenge.demo.Util.Api.Exception;
+package com.aneeque.coding.challenge.demo.Controller.ExceptionHandler;
 
 
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.CustomException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.IllegalArgumentException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.InvalidInputException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UnAuthorizedException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UserNotFoundException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorResponse.ApiExceptionMessage;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorResponse.ErrorDetails;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.CustomException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.IllegalArgumentException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.InvalidInputException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.UnAuthorizedException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.UserNotFoundException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorResponse.ApiExceptionMessage;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorResponse.ErrorDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

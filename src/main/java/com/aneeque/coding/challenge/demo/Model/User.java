@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class User extends BaseModel{
 
     @NotNull(message = "firstName is mandatory")

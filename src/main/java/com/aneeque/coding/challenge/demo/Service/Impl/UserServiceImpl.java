@@ -1,32 +1,31 @@
 package com.aneeque.coding.challenge.demo.Service.Impl;
 
 import com.aneeque.coding.challenge.demo.Config.JwtTokenConfig;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.IllegalArgumentException;
+import com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass.UserNotFoundException;
 import com.aneeque.coding.challenge.demo.Dto.UserLoginDto;
-import com.aneeque.coding.challenge.demo.Dto.UserResResDto;
+import com.aneeque.coding.challenge.demo.Dto.UserResponseDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpReqDto;
 import com.aneeque.coding.challenge.demo.Dto.UserSignUpResDto;
 import com.aneeque.coding.challenge.demo.Model.User;
 import com.aneeque.coding.challenge.demo.Repository.UserRepository;
 import com.aneeque.coding.challenge.demo.Service.UserAuthorityService;
 import com.aneeque.coding.challenge.demo.Service.UserService;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.IllegalArgumentException;
-import com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass.UserNotFoundException;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -96,7 +95,6 @@ public class UserServiceImpl implements UserService {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
-        apiResponse.setHttpStatus(HttpStatus.CREATED);
         apiResponse.setMessage("User Created Successfully");
         apiResponse.setData(USER_SIGNUP_RES_DTO);
 
@@ -129,7 +127,6 @@ public class UserServiceImpl implements UserService {
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
-        apiResponse.setHttpStatus(HttpStatus.OK);
         apiResponse.setMessage("Login Was Successful");
         apiResponse.setJwtToken(JWT_USER_TOKEN);
 
@@ -137,25 +134,78 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResponse getAllUsers() {
+    public ApiResponse getAllUsers(int page, int size, String sortByField) {
 
-        List<UserResResDto> userResResDtos =  new ArrayList<>();
+        // i have already done this at the controller level but i just want to do it here in case another service wants to use this method
+        if(size <= 0) {
 
-        final List<User> ALL_USERS = userRepository.findAll();
+            page = 20;
+        }
+
+        if (Objects.isNull(sortByField)) {
+
+            sortByField ="createdAt";
+        }
+
+        Sort.Direction sortDirection = Sort.Direction.ASC;
+
+        sortByField = sortByField.toLowerCase().trim();
+
+        //  to make the field to sort the records by more flexible so that  the client can sort  by either firstName, lastName , country or createdAt
+        final String validatedSortByField = validateSortByField(sortByField);
+
+        if (validatedSortByField.equals("createdAt")) {
+
+            sortDirection =  Sort.Direction.DESC;
+        }
+
+
+        Sort sort = Sort.by(sortDirection, validatedSortByField);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        final Page<User> ALL_USERS = userRepository.findAll(pageable);
+        List<UserResponseDto> userResponseDtos =  new ArrayList<>();
 
         ALL_USERS.forEach(user -> {
 
-            UserResResDto userResResDto = modelMapper.map(user, UserResResDto.class);
-            userResResDtos.add(userResResDto);
+            UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+            userResponseDtos.add(userResponseDto);
 
         });
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(true);
         apiResponse.setMessage("List of Users");
-        apiResponse.setData(userResResDtos);
+        apiResponse.setData(userResponseDtos);
 
         return apiResponse;
+    }
+
+    public String validateSortByField(String sortByField) {
+
+        switch (sortByField) {
+
+            case "firstname":
+                sortByField = "firstName";
+                break;
+
+            case "lastname":
+                sortByField = "lastName";
+                break;
+
+            case "country":
+                sortByField = "country";
+                break;
+
+            case "createdat":
+                sortByField = "createdAt";
+                break;
+
+            default:
+
+                throw new IllegalArgumentException("sortByField must have a value of firstName, lastName, country or createAt", "/user");
+        }
+
+        return sortByField;
     }
 
 }

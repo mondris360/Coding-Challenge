@@ -1,4 +1,4 @@
-package com.aneeque.coding.challenge.demo.Util.Api.Exception.CustomErrorClass;
+package com.aneeque.coding.challenge.demo.Controller.ExceptionHandler.CustomErrorClass;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

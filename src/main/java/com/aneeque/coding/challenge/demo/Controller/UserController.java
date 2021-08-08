@@ -6,10 +6,7 @@ import com.aneeque.coding.challenge.demo.Service.UserService;
 import com.aneeque.coding.challenge.demo.Util.Api.Response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,9 +28,11 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<ApiResponse> getAllUsers() {
+    public ResponseEntity<ApiResponse> getAllUsers(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                   @RequestParam(name = "size", defaultValue = "20") int size,
+                                                   @RequestParam(name = "sortByField", defaultValue = "createdAt") String sortByField) {
 
-        final ApiResponse apiResponse = userService.getAllUsers();
+        final ApiResponse apiResponse = userService.getAllUsers(page, size, sortByField);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

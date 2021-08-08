@@ -12,7 +12,6 @@ import java.io.Serializable;
 @ToString
 public class ApiResponse implements Serializable {
     private boolean status;
-    private HttpStatus httpStatus;
     private String message;
     private String jwtToken;
     private Object data;
@@ -20,7 +19,6 @@ public class ApiResponse implements Serializable {
 
     public ApiResponse(boolean status, HttpStatus httpStatus, String message) {
         this.status = status;
-        this.httpStatus = httpStatus;
         this.message = message;
     }
 

@@ -3,6 +3,7 @@ package com.aneeque.coding.challenge.demo.Dto;
 import com.aneeque.coding.challenge.demo.Model.Authority;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
@@ -10,7 +11,8 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResResDto {
+@ToString
+public class UserResponseDto {
 
     private String firstName;
 

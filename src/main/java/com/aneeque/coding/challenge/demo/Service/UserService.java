@@ -12,6 +12,6 @@ public interface UserService {
 
     ApiResponse login(UserLoginDto request);
 
-    ApiResponse getAllUsers();
+    ApiResponse getAllUsers(int page, int size, String sortByField);
 
 }
