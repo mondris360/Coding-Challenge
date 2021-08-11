@@ -32,6 +32,7 @@ public class UserSignUpReqDto {
     @NotBlank(message = "phoneNo is mandatory")
     private String phoneNo;
 
+    @NotBlank(message = "country is mandatory")
     private String country;
 
     @NotBlank(message = "please specify one or more user authorities")

@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CodingChallengeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="coding-challenge" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.aneeque.coding.challenge.demo.CodingChallengeApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="DATABASE_URL" value="jdbc:mysql://localhost:3306/aneeque?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+      <env name="DATABASE_USERNAME" value="root" />
+      <env name="DATABASE_PASSWORD" value="password" />
+      <env name="APP_PORT" value="8081" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

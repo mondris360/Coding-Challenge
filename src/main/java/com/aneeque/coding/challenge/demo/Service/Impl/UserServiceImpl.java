@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
 
     private  UserAuthorityService authorityService;
 
-    private Validator validator;
 
 
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPassEncoder,
@@ -111,7 +110,6 @@ public class UserServiceImpl implements UserService {
         // NOTE: user input has already been validated at dto level. Please check UserLoginDto
 
         final String API_PATH = "user/login";
-        System.out.println("Connecting to db");
         final User USER = userRepository.getByEmail(request.getEmail().toLowerCase().trim());
 
         if (Objects.isNull(USER)) {
@@ -141,7 +139,12 @@ public class UserServiceImpl implements UserService {
         // i have already done this at the controller level but i just want to do it here in case another service wants to use this method
         if(size <= 0) {
 
-            page = 20;
+            size = 20;
+        }
+
+        if (page < 0){
+
+            page = 0;
         }
 
         if (Objects.isNull(sortByField)) {
