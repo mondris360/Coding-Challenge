@@ -137,6 +137,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse getAllUsers(int page, int size, String sortByField) {
         // i have already done this at the controller level but i just want to do it here in case another service wants to use this method
+
         if(size <= 0) {
 
             size = 20;

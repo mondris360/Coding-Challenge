@@ -27,6 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
+//    @PreAuthorize("hasRole(admin')")  i commented it just to keep my implementation simple
     public ResponseEntity<ApiResponse> getAllUsers(@RequestParam(name = "page", defaultValue = "0") int page,
                                                    @RequestParam(name = "size", defaultValue = "20") int size,
                                                    @RequestParam(name = "sortByField", defaultValue = "createdAt") String sortByField) {
